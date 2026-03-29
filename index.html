@@ -3,37 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>راديو القرآن الكريم</title>
+    <title>إذاعة القرآن الكريم | كيمو</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Noto+Kufi+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #c5a059; 
+            --bg-dark: #051412; 
+            --glass: rgba(255, 255, 255, 0.08);
         }
+
         body {
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
-            background: white;
-            color: black;
+            margin: 0; padding: 0;
+            background-color: var(--bg-dark);
+            color: #fff;
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            background-image: radial-gradient(circle at top right, #0d3b36, transparent);
+            min-height: 100vh;
+        }
+
+        .overlay-pattern {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/islamic-art.png');
+            opacity: 0.1; z-index: -1;
+        }
+
+        header { text-align: center; padding: 40px 20px; }
+        header h1 { font-family: 'Amiri', serif; font-size: 2.8rem; color: var(--primary); margin: 0; text-shadow: 0 0 15px rgba(197, 160, 89, 0.4); }
+
+        /* السبحة الإلكترونية */
+        .tasbih-box {
+            max-width: 350px;
+            margin: 0 auto 40px;
+            background: var(--glass);
+            border-radius: 25px;
             padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
+            text-align: center;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            backdrop-filter: blur(10px);
         }
-        button {
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
-            background: #eee;
-            border: 1px solid #999;
-            padding: 6px 12px;
-            cursor: pointer;
+
+        .tasbih-count { font-size: 3rem; font-weight: bold; color: var(--primary); display: block; margin: 5px 0; }
+        .tasbih-btn {
+            background: var(--primary); color: var(--bg-dark); border: none;
+            padding: 12px 35px; border-radius: 50px; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3);
         }
-        pre {
-            background: #f5f5f5;
-            padding: 12px;
-            margin-top: 8px;
-            white-space: pre-wrap;
-            font-size: 11px;
-            border: 1px solid #ccc;
-            direction: ltr;
-            text-align: left;
+        .tasbih-btn:active { transform: scale(0.9); }
+
+        /* محرك البحث */
+        .search-wrapper { max-width: 550px; margin: 0 auto 30px; padding: 0 20px; position: relative; }
+        #searchInput {
+            width: 100%; padding: 15px 25px; border-radius: 50px;
+            border: 1px solid var(--primary); background: var(--glass); color: white; outline: none;
+            text-align: center; font-size: 1rem;
+        }
+
+        /* شبكة الإذاعات */
+        .grid-container {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px; max-width: 1100px; margin: 0 auto; padding: 20px;
+        }
+
+        .card {
+            background: var(--glass); border-radius: 20px; padding: 25px; text-align: center;
+            border: 1px solid rgba(197, 160, 89, 0.1); transition: 0.3s;
+        }
+        .card:hover { border-color: var(--primary); transform: translateY(-5px); background: rgba(255,255,255,0.12); }
+        .card i { color: var(--primary); font-size: 2.2rem; margin-bottom: 15px; display: block; }
+        .card h3 { font-size: 1rem; margin-bottom: 20px; height: 45px; overflow: hidden; line-height: 1.5; }
+
+        audio { width: 100%; height: 35px; filter: invert(0.8) brightness(1.2); }
+
+        footer { text-align: center; padding: 40px; border-top: 1px solid rgba(197, 160, 89, 0.2); margin-top: 50px; font-size: 0.9rem; opacity: 0.8; }
+        .dev-info { color: var(--primary); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="overlay-pattern"></div>
+
+<header>
+    <h1 class="animate__animated animate__fadeInDown">نورُ الهُدى</h1>
+    <p>بث مباشر لإذاعات القرآن الكريم</p>
+</header>
+
+<div class="tasbih-box animate__animated animate__fadeInUp">
+    <p style="margin:0; font-size: 0.9rem;">السبحة الإلكترونية</p>
+    <span id="counter" class="tasbih-count">0</span>
+    <button class="tasbih-btn" onclick="increment()">سبّح</button>
+    <p style="font-size: 0.7rem; margin-top: 10px; cursor: pointer; color: #ff7675;" onclick="resetCounter()">تصفير العداد</p>
+</div>
+
+<div class="search-wrapper">
+    <input type="text" id="searchInput" placeholder="🔍 ابحث عن قارئ أو إذاعة...">
+</div>
+
+<main id="radioGrid" class="grid-container">
+    <div style="text-align: center; width: 100%; grid-column: 1 / -1;">⏳ جاري تحميل الإذاعات...</div>
+</main>
+
+<footer>
+    <p>صدقة جارية - راديو القرآن الكريم</p>
+    <p>بواسطة المساعد الذكي: <span class="dev-info">Gemini AI</span></p>
+</footer>
+
+<script>
+    // برمجة العداد
+    let count = localStorage.getItem('tasbihCount') || 0;
+    const counterDisplay = document.getElementById('counter');
+    counterDisplay.innerText = count;
+
+    function increment() {
+        count++;
+        counterDisplay.innerText = count;
+        localStorage.setItem('tasbihCount', count);
+    }
+
+    function resetCounter() {
+        if(confirm("هل تريد تصفير العداد؟")) {
+            count = 0;
+            counterDisplay.innerText = count;
+            localStorage.setItem('tasbihCount', 0);
+        }
+    }
+
+    // برمجة الإذاعات (باستخدام API mp3quran الرسمي)
+    const radioGrid = document.getElementById('radioGrid');
+    const searchInput = document.getElementById('searchInput');
+    let allRadios = [];
+
+    async function loadRadios() {
+        try {
+            const res = await fetch('https://mp3quran.net/api/v3/radios');
+            const data = await res.json();
+            allRadios = data.radios;
+            render(allRadios);
+        } catch (e) {
+            radioGrid.innerHTML = "<p>تعذر تحميل البيانات، يرجى المحاولة لاحقاً.</p>";
+        }
+    }
+
+    function render(list) {
+        radioGrid.innerHTML = '';
+        list.forEach(radio => {
+            const card = document.createElement('div');
+            card.className = 'card animate__animated animate__fadeIn';
+            card.innerHTML = `
+                <i class="fa-solid fa-kaaba"></i>
+                <h3>${radio.name}</h3>
+                <audio controls preload="none">
+                    <source src="${radio.url}" type="audio/mpeg">
+                </audio>
+            `;
+            radioGrid.appendChild(card);
+        });
+    }
+
+    searchInput.addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        render(allRadios.filter(r => r.name.toLowerCase().includes(val)));
+    });
+
+    loadRadios();
+</script>
+
+</body>
+</html>
             line-height: 1.5;
             font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
         }
