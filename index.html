@@ -3,464 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>راديو القرآن الكريم</title>
+    <title>إذاعة القرآن الكريم | كيمو</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Noto+Kufi+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #c5a059; 
+            --bg-dark: #051412; 
+            --glass: rgba(255, 255, 255, 0.08);
         }
+
         body {
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
-            background: white;
-            color: black;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
+            margin: 0; padding: 0;
+            background-color: var(--bg-dark);
+            color: #fff;
+            font-family: 'Noto Kufi Arabic', sans-serif;
+            background-image: radial-gradient(circle at top right, #0d3b36, transparent);
+            min-height: 100vh;
         }
-        button {
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
-            background: #eee;
-            border: 1px solid #999;
-            padding: 6px 12px;
-            cursor: pointer;
+
+        .overlay-pattern {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/islamic-art.png');
+            opacity: 0.1; z-index: -1;
         }
-        pre {
-            background: #f5f5f5;
-            padding: 12px;
-            margin-top: 8px;
-            white-space: pre-wrap;
-            font-size: 11px;
-            border: 1px solid #ccc;
-            direction: ltr;
-            text-align: left;
-            line-height: 1.5;
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
-        }
-        .hidden {
-            display: none;
-        }
-        .settings-content {
-            margin-top: 10px;
-            padding: 12px;
-            background: #f9f9f9;
-            border: 1px solid #ccc;
-            display: none;
-        }
-        .settings-content.show {
-            display: block;
-        }
-        .setting-item {
-            margin-bottom: 15px;
-        }
-        .setting-link-group {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            margin-top: 5px;
-            flex-wrap: wrap;
-        }
-        .link-url {
-            color: #00c;
-            text-decoration: underline;
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
-            font-size: 11px;
-            word-break: break-all;
-        }
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0;
-        }
-        .info-table td {
-            padding: 8px 0;
-            border-bottom: 1px solid #ddd;
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
-        }
-        .info-table td:first-child {
-            font-weight: bold;
-            width: 100px;
-        }
-        .flex {
-            display: flex;
-            gap: 12px;
-            margin: 15px 0;
-        }
-        .progress-container {
-            margin: 15px 0;
-        }
-        .progress-bar {
-            width: 100%;
-            height: 5px;
-            background: #ddd;
-            cursor: default;
-            position: relative;
-        }
-        .progress-fill {
-            height: 100%;
-            background: #666;
-            width: 0%;
-            pointer-events: none;
-        }
-        .time-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            margin-top: 5px;
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
-            direction: ltr;
-        }
-        .loading {
+
+        header { text-align: center; padding: 40px 20px; }
+        header h1 { font-family: 'Amiri', serif; font-size: 2.8rem; color: var(--primary); margin: 0; text-shadow: 0 0 15px rgba(197, 160, 89, 0.4); }
+
+        .tasbih-box {
+            max-width: 350px;
+            margin: 0 auto 40px;
+            background: var(--glass);
+            border-radius: 25px;
             padding: 20px;
             text-align: center;
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            backdrop-filter: blur(10px);
         }
-        .error {
-            color: red;
-            padding: 10px;
-            border: 1px solid red;
-            background: #ffe0e0;
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
+
+        .tasbih-count { font-size: 3rem; font-weight: bold; color: var(--primary); display: block; margin: 5px 0; }
+        .tasbih-btn {
+            background: var(--primary); color: var(--bg-dark); border: none;
+            padding: 12px 35px; border-radius: 50px; font-size: 1.1rem; font-weight: bold;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(197, 160, 89, 0.3);
         }
-        hr {
-            margin: 12px 0;
-            border: none;
-            border-top: 1px solid #ddd;
+        .tasbih-btn:active { transform: scale(0.9); }
+
+        .search-wrapper { max-width: 550px; margin: 0 auto 30px; padding: 0 20px; position: relative; }
+        #searchInput {
+            width: 100%; padding: 15px 25px; border-radius: 50px;
+            border: 1px solid var(--primary); background: var(--glass); color: white; outline: none;
+            text-align: center; font-size: 1rem;
         }
-        .footer {
-            margin-top: 25px;
-            padding-top: 15px;
-            border-top: 1px solid #ddd;
-            text-align: center;
-            font-size: 11px;
-            color: #666;
-            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
+
+        .grid-container {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px; max-width: 1100px; margin: 0 auto; padding: 20px;
         }
+
+        .card {
+            background: var(--glass); border-radius: 20px; padding: 25px; text-align: center;
+            border: 1px solid rgba(197, 160, 89, 0.1); transition: 0.3s;
+        }
+        .card:hover { border-color: var(--primary); transform: translateY(-5px); background: rgba(255,255,255,0.12); }
+        .card i { color: var(--primary); font-size: 2.2rem; margin-bottom: 15px; display: block; }
+        .card h3 { font-size: 1rem; margin-bottom: 20px; height: 45px; overflow: hidden; line-height: 1.5; }
+
+        audio { width: 100%; height: 35px; filter: invert(0.8) brightness(1.2); }
+
+        footer { text-align: center; padding: 40px; border-top: 1px solid rgba(197, 160, 89, 0.2); margin-top: 50px; font-size: 0.9rem; opacity: 0.8; }
+        .dev-info { color: var(--primary); font-weight: bold; }
     </style>
 </head>
 <body>
-<div>
-    <button id="settingsBtn">⚙️ الإعدادات</button>
-    
-    <div id="settingsContent" class="settings-content">
-        <div class="setting-item">
-            <div><strong>🔗 رابط API البث:</strong></div>
-            <div class="setting-link-group">
-                <a href="#" id="apiLink" target="_blank" class="link-url"></a>
-                <button class="copyBtn" data-target="apiUrl">نسخ</button>
-            </div>
-            <input type="text" id="apiUrl" style="display:none;" readonly>
-        </div>
-        <div class="setting-item">
-            <div><strong>📖 رابط قائمة السور:</strong></div>
-            <div class="setting-link-group">
-                <a href="https://jsonkeeper.com/b/P07SJ" target="_blank" class="link-url">jsonkeeper.com/b/P07SJ</a>
-                <button class="copyBtn" data-target="surahList">نسخ</button>
-            </div>
-            <input type="text" id="surahList" style="display:none;" readonly value="https://jsonkeeper.com/b/P07SJ">
-        </div>
-        <div class="setting-item">
-            <div><strong>🐙 رابط المشروع:</strong></div>
-            <div class="setting-link-group">
-                <a href="https://github.com/X5Coder/Quran-Website-API" target="_blank" class="link-url">https://github.com/X5Coder/Quran-Website-API</a>
-                <button class="copyBtn" data-target="githubUrl">نسخ</button>
-            </div>
-            <input type="text" id="githubUrl" style="display:none;" readonly value="https://github.com/X5Coder/Quran-Website-API">
-        </div>
-    </div>
 
-    <div id="loading" class="loading">⏳ جاري تحميل البث...</div>
-    
-    <div id="content" class="hidden">
-        <table class="info-table">
-            <tr><td>📡 بيانات الاتصال</td><td id="connectionStatus">🟢 متصل</td></tr>
-            <tr><td>📖 السورة</td><td id="surah">-</td></tr>
-            <tr><td>🎙️ القارئ</td><td id="reader">-</td></tr>
-            <tr><td>🔢 رقم السورة</td><td id="surahNum">-</td></tr>
-            <tr><td>⏱️ مدة السورة</td><td id="duration">-</td></tr>
-        </table>
-        
-        <div class="progress-container">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="time-row">
-                <span id="currentTime">00:00</span>
-                <span id="durationTime">00:00</span>
-            </div>
-        </div>
-        
-        <div class="flex">
-            <button id="playBtn">▶ تشغيل</button>
-            <button id="muteBtn">🔊 كتم</button>
-        </div>
-        
-        <hr>
-        
-        <div><strong>📋 البيانات الخام (JSON):</strong></div>
-        <pre id="jsonData"></pre>
-    </div>
-    
-    <div id="error" class="error hidden">❌ خطأ في الاتصال</div>
-    
-    <div class="footer">
-        راديو قرآن كريم - صدقة جارية على روحي - المطور كريم
-    </div>
+<div class="overlay-pattern"></div>
+
+<header>
+    <h1 class="animate__animated animate__fadeInDown">نورُ الهُدى</h1>
+    <p>بث مباشر لإذاعات القرآن الكريم</p>
+</header>
+
+<div class="tasbih-box animate__animated animate__fadeInUp">
+    <p style="margin:0; font-size: 0.9rem;">السبحة الإلكترونية</p>
+    <span id="counter" class="tasbih-count">0</span>
+    <button class="tasbih-btn" onclick="increment()">سبّح</button>
+    <p style="font-size: 0.7rem; margin-top: 10px; cursor: pointer; color: #ff7675;" onclick="resetCounter()">تصفير العداد</p>
 </div>
 
-<audio id="audio"></audio>
+<div class="search-wrapper">
+    <input type="text" id="searchInput" placeholder="🔍 ابحث عن قارئ أو إذاعة...">
+</div>
+
+<main id="radioGrid" class="grid-container">
+    <div style="text-align: center; width: 100%; grid-column: 1 / -1;">⏳ جاري تحميل الإذاعات...</div>
+</main>
+
+<footer>
+    <p>صدقة جارية - راديو القرآن الكريم</p>
+    <p>بواسطة المساعد الذكي: <span class="dev-info">Gemini AI</span></p>
+</footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzod3HSUKOjxabBDeovU5UfVAE-bnb5DptND0MBmhIBL_sb01MOtaBStNGt9dhybHwu/exec?key=KIMO";
+    let count = localStorage.getItem('tasbihCount') || 0;
+    const counterDisplay = document.getElementById('counter');
+    counterDisplay.innerText = count;
 
-const loadingDiv = document.getElementById('loading');
-const contentDiv = document.getElementById('content');
-const errorDiv = document.getElementById('error');
-const connectionStatusSpan = document.getElementById('connectionStatus');
-const surahSpan = document.getElementById('surah');
-const readerSpan = document.getElementById('reader');
-const surahNumSpan = document.getElementById('surahNum');
-const durationSpan = document.getElementById('duration');
-const currentTimeSpan = document.getElementById('currentTime');
-const durationTimeSpan = document.getElementById('durationTime');
-const progressFill = document.getElementById('progressFill');
-const jsonPre = document.getElementById('jsonData');
-const playBtn = document.getElementById('playBtn');
-const muteBtn = document.getElementById('muteBtn');
-const audio = document.getElementById('audio');
-
-let currentData = null;
-let isMuted = false;
-let hasStarted = false;
-let isUpdating = false;
-
-function toSeconds(t) {
-    if (!t) return 0;
-    let p = t.split(':').map(Number);
-    if (p.length === 3) return p[0]*3600 + p[1]*60 + p[2];
-    if (p.length === 2) return p[0]*60 + p[1];
-    return 0;
-}
-
-function toTime(sec) {
-    if (isNaN(sec) || sec < 0) return "00:00";
-    let h = Math.floor(sec / 3600);
-    let m = Math.floor((sec % 3600) / 60);
-    let s = Math.floor(sec % 60);
-    if (h > 0) return `${h}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-    return `${m}:${s.toString().padStart(2,'0')}`;
-}
-
-function updateProgress() {
-    if (audio && currentData && !isNaN(audio.currentTime)) {
-        let currentSec = audio.currentTime;
-        let durationSec = toSeconds(currentData.duration);
-        let percent = durationSec > 0 ? (currentSec / durationSec) * 100 : 0;
-        progressFill.style.width = percent + '%';
-        currentTimeSpan.innerText = toTime(currentSec);
-        durationTimeSpan.innerText = currentData.duration;
+    function increment() {
+        count++;
+        counterDisplay.innerText = count;
+        localStorage.setItem('tasbihCount', count);
     }
-}
 
-async function fetchData() {
-    try {
-        let res = await fetch(API_URL + "&_=" + Date.now());
-        if (!res.ok) throw new Error();
-        let json = await res.json();
-        if (json.error) throw new Error();
-        return {
-            ok: true,
-            num: json.رقم_السورة || 0,
-            reader: json.اسم_القارئ || "غير معروف",
-            surah: json.اسم_السورة || "سورة",
-            url: json.رابط_السورة || "",
-            duration: json.مدة_السورة || "00:00",
-            current: json.الوقت_الحالي_للسورة || "00:00"
-        };
-    } catch(e) {
-        return { ok: false };
-    }
-}
-
-function updateUI(data) {
-    connectionStatusSpan.innerText = "🟢 متصل";
-    surahSpan.innerText = data.surah;
-    readerSpan.innerText = data.reader;
-    surahNumSpan.innerText = data.num;
-    durationSpan.innerText = data.duration;
-    durationTimeSpan.innerText = data.duration;
-    
-    let now = (audio && !isNaN(audio.currentTime)) ? audio.currentTime : toSeconds(data.current);
-    currentTimeSpan.innerText = toTime(now);
-    
-    let percent = toSeconds(data.duration) > 0 ? (now / toSeconds(data.duration)) * 100 : 0;
-    progressFill.style.width = percent + '%';
-    
-    let jsonObj = {
-        "رقم_السورة": data.num,
-        "اسم_القارئ": data.reader,
-        "اسم_السورة": data.surah,
-        "رابط_الصوت": data.url,
-        "مدة_السورة": data.duration,
-        "الوقت_الحالي": data.current
-    };
-    jsonPre.innerText = JSON.stringify(jsonObj, null, 2);
-}
-
-function syncAudio() {
-    if (!audio || !currentData) return;
-    let serverTime = toSeconds(currentData.current);
-    if (serverTime > 0 && Math.abs(audio.currentTime - serverTime) > 1.5) {
-        audio.currentTime = serverTime;
-        updateProgress();
-    }
-}
-
-let timeLoopRunning = false;
-function startTimeLoop() {
-    if (timeLoopRunning) return;
-    timeLoopRunning = true;
-    function update() {
-        updateProgress();
-        requestAnimationFrame(update);
-    }
-    update();
-}
-
-async function refresh() {
-    if (isUpdating) return;
-    isUpdating = true;
-    
-    let result = await fetchData();
-    
-    if (result.ok) {
-        let newData = {
-            num: result.num,
-            reader: result.reader,
-            surah: result.surah,
-            url: result.url,
-            duration: result.duration,
-            current: result.current
-        };
-        
-        let wasPlaying = hasStarted && !audio.paused;
-        let surahChanged = !currentData || currentData.surah !== newData.surah || currentData.url !== newData.url;
-        
-        if (surahChanged) {
-            currentData = newData;
-            if (audio.src !== newData.url) {
-                audio.src = newData.url;
-            }
-            if (audio.readyState >= 2) {
-                syncAudio();
-            }
-            if (wasPlaying && hasStarted) {
-                audio.play().catch(() => {});
-            }
-        } else {
-            currentData = newData;
-            syncAudio();
-        }
-        
-        updateUI(currentData);
-        
-        loadingDiv.classList.add('hidden');
-        contentDiv.classList.remove('hidden');
-        errorDiv.classList.add('hidden');
-    } else {
-        connectionStatusSpan.innerText = "🔴 غير متصل";
-        if (!currentData) {
-            loadingDiv.classList.add('hidden');
-            errorDiv.classList.remove('hidden');
-            contentDiv.classList.add('hidden');
+    function resetCounter() {
+        if(confirm("هل تريد تصفير العداد؟")) {
+            count = 0;
+            counterDisplay.innerText = count;
+            localStorage.setItem('tasbihCount', 0);
         }
     }
-    
-    isUpdating = false;
-}
 
-playBtn.onclick = () => {
-    if (audio && currentData && currentData.url) {
-        if (isMuted) {
-            audio.volume = 1;
-            isMuted = false;
-            muteBtn.innerText = "🔊 كتم";
+    const radioGrid = document.getElementById('radioGrid');
+    const searchInput = document.getElementById('searchInput');
+    let allRadios = [];
+
+    async function loadRadios() {
+        try {
+            const res = await fetch('https://mp3quran.net/api/v3/radios');
+            const data = await res.json();
+            allRadios = data.radios;
+            render(allRadios);
+        } catch (e) {
+            radioGrid.innerHTML = "<p>تعذر تحميل البيانات، يرجى المحاولة لاحقاً.</p>";
         }
-        audio.play().then(() => {
-            hasStarted = true;
-            playBtn.style.display = 'none';
-        }).catch(() => {
-            setTimeout(() => audio.play().catch(() => {}), 100);
+    }
+
+    function render(list) {
+        radioGrid.innerHTML = '';
+        list.forEach(radio => {
+            const card = document.createElement('div');
+            card.className = 'card animate__animated animate__fadeIn';
+            card.innerHTML = `
+                <i class="fa-solid fa-kaaba"></i>
+                <h3>${radio.name}</h3>
+                <audio controls preload="none">
+                    <source src="${radio.url}" type="audio/mpeg">
+                </audio>
+            `;
+            radioGrid.appendChild(card);
         });
     }
-};
 
-muteBtn.onclick = () => {
-    if (audio) {
-        if (!isMuted) {
-            audio.volume = 0;
-            isMuted = true;
-            muteBtn.innerText = "🔇 تشغيل الصوت";
-        } else {
-            audio.volume = 1;
-            isMuted = false;
-            muteBtn.innerText = "🔊 كتم";
-        }
-    }
-};
-
-audio.addEventListener('ended', () => {
-    refresh();
-});
-
-audio.addEventListener('canplay', () => {
-    syncAudio();
-});
-
-audio.addEventListener('timeupdate', () => {
-    updateProgress();
-});
-
-function setupSettings() {
-    let btn = document.getElementById('settingsBtn');
-    let panel = document.getElementById('settingsContent');
-    let apiLink = document.getElementById('apiLink');
-    let apiInput = document.getElementById('apiUrl');
-    
-    apiInput.value = API_URL;
-    apiLink.href = API_URL;
-    apiLink.innerText = API_URL.length > 55 ? API_URL.substring(0, 52) + '...' : API_URL;
-    
-    btn.onclick = () => panel.classList.toggle('show');
-    
-    document.querySelectorAll('.copyBtn').forEach(b => {
-        b.onclick = () => {
-            let id = b.getAttribute('data-target');
-            let input = document.getElementById(id);
-            if (input) {
-                navigator.clipboard.writeText(input.value);
-                let old = b.innerText;
-                b.innerText = '✓';
-                setTimeout(() => b.innerText = old, 1000);
-            }
-        };
+    searchInput.addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        render(allRadios.filter(r => r.name.toLowerCase().includes(val)));
     });
-    
-    document.addEventListener('click', (e) => {
-        if (!btn.contains(e.target) && !panel.contains(e.target)) {
-            panel.classList.remove('show');
-        }
-    });
-}
 
-async function init() {
-    setupSettings();
-    startTimeLoop();
-    await refresh();
-    setInterval(refresh, 25000);
-}
-
-init();
+    loadRadios();
 </script>
 </body>
 </html>
